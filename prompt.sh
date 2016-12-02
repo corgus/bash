@@ -48,9 +48,9 @@ PS1="\n\e[0;34;40m\u@\h "
 #~/path/to/here
 PS1+="\e[0;36;40m\w "
 #git branch
-PS1+="\e[1;2;36;40m\$git_branch\$git_dirty "
+PS1+="\e[0;34;40m\$git_branch\$git_dirty "
 #date
-PS1+="\e[1;34;40m\D{%F %T}\n"
+PS1+="\e[0;36;40m\D{%F %T}\n"
 #prompt
 PS1+="⚡\e[0m  "
 
