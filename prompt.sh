@@ -20,18 +20,6 @@ function bash_styles() {
 export GITAWAREPROMPT=~/.bash/git-aware-prompt
 source "${GITAWAREPROMPT}/main.sh"
 
-function git_info() {
-    # check if we're in a git repo
-    git rev-parse --is-inside-work-tree &>/dev/null || return
-
-    # check for what branch we're on
-    branch=$(git symbolic-ref -q HEAD | sed -e 's|^refs/heads/||')
-
-    # check if it's dirty (via github.com/sindresorhus/pure)
-    dirty=$(git diff --quiet --ignore-submodules HEAD &>/dev/null; [ $? -eq 1 ]&& echo -e "*")
-
-    echo $branch$dirty
-}
 
 #user@host
 PS1="\n\e[0;34;40m\u@\h "
