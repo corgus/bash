@@ -4,21 +4,43 @@
 
 
 function bash_styles() {
-    for attr in $(seq 0 2); do
-      for fg in $(seq 30 37); do
-        for bg in $(seq 40 47); do
-          printf "\033[$attr;${bg};${fg}m$attr;$fg;$bg\033[m "
-        done
-        printf "\n"
+  for attr in $(seq 0 2); do
+    for fg in $(seq 30 37); do
+      for bg in $(seq 40 47); do
+        printf "\033[$attr;${bg};${fg}m$attr;$fg;$bg\033[m "
       done
       printf "\n"
     done
+    printf "\n"
+  done
 
-    printf "\e[0m0-Reset  \e[0;1m1-Bold   \e[0;2m2-Dim   \e[0;4m4-Underlined\e[0m  \e[7m7-Inverted\e[0m \e[0m\n"
+  printf "\e[0m0-Reset  \e[0;1m1-Bold   \e[0;2m2-Dim   \e[0;4m4-Underlined\e[0m  \e[7m7-Inverted\e[0m \e[0m\n"
 }
 
-export GITAWAREPROMPT=~/.bash/git-aware-prompt
-source "${GITAWAREPROMPT}/main.sh"
+find_git_branch() {
+  # Based on: http://stackoverflow.com/a/13003854/170413
+  local branch
+  if branch=$(git rev-parse --abbrev-ref HEAD 2> /dev/null); then
+    if [[ "$branch" == "HEAD" ]]; then
+      branch='detached*'
+    fi
+    git_branch="($branch)"
+  else
+    git_branch=""
+  fi
+}
+
+find_git_dirty() {
+  local status=$(git status --porcelain 2> /dev/null)
+  if [[ "$status" != "" ]]; then
+    git_dirty='*'
+  else
+    git_dirty=''
+  fi
+}
+
+PROMPT_COMMAND="find_git_branch; find_git_dirty; $PROMPT_COMMAND"
+
 
 
 #user@host
@@ -32,6 +54,4 @@ PS1+="\e[1;34;40m\D{%F %T}\n"
 #prompt
 PS1+="⚡\e[0m  "
 
-
-# PS1="\u@\h \W \[$txtcyn\]\$git_branch\[$txtred\]\$git_dirty\[$txtrst\]\$ "
 export PS1;
